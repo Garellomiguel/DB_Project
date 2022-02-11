@@ -1,0 +1,44 @@
+# Persisten volumen definition
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-kube
+spec:
+  capacity:
+    storage: 2Gi  
+  volumeMode: Filesystem
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /data_for_api
+    type: DirectoryOrCreate
+    
+---
+
+# Persisten volumen claim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: host-pvc
+spec:
+  volumeName: pv-kube
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+# Enviromental variables
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-enviroment-varaibles
+data:
+  MYSQL_ROOT_PASSWORD: micky
+  MYSQL_ROOT_HOST: '%'
+  MYSQL_DATABASE: sensores
+

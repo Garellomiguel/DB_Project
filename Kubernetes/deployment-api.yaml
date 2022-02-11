@@ -1,0 +1,48 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata:
+  name: api-kube
+  labels:
+    app: api-deployment
+spec: 
+  replicas: 3
+  selector:
+    matchExpressions:
+      - { key: app, operator: In ,values: [api-kube] }
+  template:
+    metadata:
+      labels:
+        app: api-kube
+    spec: 
+      containers:
+        - name: api
+          image: garellomiguel/api-test-kube:latest
+          env:
+            - name: DB_HOST
+              value: $(DB_KUBE_SERVICE_SERVICE_HOST)
+              #value: db-kube-service.default
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          volumeMounts:
+            - mountPath: /app/data/
+              name: user-api-data
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+      volumes:
+        - name: user-api-data
+          hostPath:
+            path: data
+            type: DirectoryOrCreate
+      

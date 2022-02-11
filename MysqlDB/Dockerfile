@@ -1,0 +1,6 @@
+FROM mysql/mysql-server:latest
+
+
+ENV MYSQL_DATABASE=test
+ENV MYSQL_ROOT_PASSWORD=micky
+ENV MYSQL_ROOT_HOST='%'

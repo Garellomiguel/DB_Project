@@ -1,0 +1,33 @@
+# Expose the db inside cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-kube-service
+spec:
+  selector:
+    app: db-kube
+  ports: 
+    - port: 3306
+      targetPort: 3306
+      protocol: 'TCP'
+      name: http
+  type: ClusterIP
+
+---
+
+# Expose the api to the outside world
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-kube-service
+spec:
+  selector:
+    app: api-kube
+  ports: 
+    - port: 5000
+      targetPort: 5000
+      protocol: 'TCP'
+      name: http
+  type: LoadBalancer
+
+# minikube service api-kube-service

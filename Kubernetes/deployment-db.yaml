@@ -1,0 +1,59 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata:
+  name: db-kube
+  labels:
+    app: db-deployment
+spec:
+  replicas: 1 
+  selector:
+    matchExpressions:
+      - { key: app, operator: In ,values: [db-kube] }
+  template:
+    metadata:
+      labels:
+        app: db-kube
+    spec: 
+      containers:
+        - name: db
+          image: mysql/mysql-server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 20
+            periodSeconds: 10
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: db-enviroment-varaibles
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_ROOT_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: db-enviroment-varaibles
+                  key: MYSQL_ROOT_HOST
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: db-enviroment-varaibles
+                  key: MYSQL_DATABASE
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db-data
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "200m"
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: host-pvc
+            

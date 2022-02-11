@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  mysqlDB:
+    image: mysql/mysql-server:latest
+    container_name: mysqlDB
+    ports:
+      - 3306:3306
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: micky
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: sensores
+      #MYSQL_USER: iot
+      #MYSQL_PASSWORD: supersecurepassword
+  
+  API:
+    image: api
+    container_name: APIdb
+    ports:
+      - 5000:5000
+    environment:
+      DB_HOST: mysqlDB
+    volumes:
+      - user-api-data:/root/app/data.db
+      
+volumes:
+  db-data:
+  user-api-data:
