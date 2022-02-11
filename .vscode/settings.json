@@ -1,5 +1,0 @@
-{
-    "yaml.schemas": {
-        "kubernetes://schema/apps/v1@deployment": "file:///home/gandalf/DB_Protect/Kubernetes/deployment-api.yaml"
-    }
-}
