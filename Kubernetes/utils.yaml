@@ -38,7 +38,17 @@ kind: ConfigMap
 metadata:
   name: db-enviroment-varaibles
 data:
-  MYSQL_ROOT_PASSWORD: micky
   MYSQL_ROOT_HOST: '%'
   MYSQL_DATABASE: sensores
+
+---
+# Secrets -----> Ver de pasarlo Hasicop Vault asi no va como variable de entorno y puedo pasar a la api mejor el iot_user
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-pass
+type: Opaque
+data:
+  MYSQL_ROOT_PASSWORD: micky
+  IOT_USER_PASSWORD: micky
 

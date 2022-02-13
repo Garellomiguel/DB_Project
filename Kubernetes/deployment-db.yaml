@@ -1,14 +1,13 @@
-apiVersion: apps/v1 
-kind: Deployment 
+apiVersion: apps/v1
+kind: StatefulSet  # Ver de pasarlo a operador de mysql para poder aumentar el numero de replicas de mejor forma
 metadata:
   name: db-kube
-  labels:
-    app: db-deployment
 spec:
+  serviceName: db-kube
   replicas: 1 
   selector:
-    matchExpressions:
-      - { key: app, operator: In ,values: [db-kube] }
+    matchLabels:
+      app: db-kube
   template:
     metadata:
       labels:
@@ -18,19 +17,11 @@ spec:
         - name: db
           image: mysql/mysql-server:latest
           imagePullPolicy: Always
-          ports:
-            - containerPort: 3306
-              protocol: TCP
-          livenessProbe:
-            tcpSocket:
-              port: 3306
-            initialDelaySeconds: 20
-            periodSeconds: 10
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
-                configMapKeyRef:
-                  name: db-enviroment-varaibles
+                secretKeyRef:
+                  name: mysql-pass
                   key: MYSQL_ROOT_PASSWORD
             - name: MYSQL_ROOT_HOST
               valueFrom:
@@ -47,10 +38,10 @@ spec:
               name: db-data
           resources:
             requests:
-              memory: "64Mi"
+              memory: "128Mi"
               cpu: "100m"
             limits:
-              memory: "128Mi"
+              memory: "512Mi"
               cpu: "200m"
       volumes:
         - name: db-data
