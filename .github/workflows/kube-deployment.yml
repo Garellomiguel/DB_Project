@@ -23,3 +23,8 @@ jobs:
         docker build --file Dockerfile --tag ${{ secrets.DHR_URL }}/api-test-kube:$ {{ github.sha }} ./API/app/.
         docker push ${{ secrets.DHR_URL }}/api-test-kube:$ {{ github.sha }}
         
+    - name: Kubernetes Set Context
+      uses: Azure/k8s-set-context@v2
+      with:
+        method: kubeconfig
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
