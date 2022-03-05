@@ -13,10 +13,8 @@ jobs:
     - name: Docker Login
       uses: docker/login-action@v1.14.1
       with:
-        registry: ${{ secrets.DHR_URL }} 
         username: ${{ secrets.DHR_UN }}
         password: ${{ secrets.DHR_PASS }}
-        logout: true
 
     - name: Kubernetes Set Context
       uses: Azure/k8s-set-context@v2
