@@ -16,7 +16,7 @@ jobs:
         registry: ${{ secrets.DHR_URL }} 
         username: ${{ secrets.DHR_UN }}
         password: ${{ secrets.DHR_PASS }}
-        logour: true
+        logout: true
 
     - name: Kubernetes Set Context
       uses: Azure/k8s-set-context@v2
