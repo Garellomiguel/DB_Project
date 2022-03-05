@@ -25,7 +25,7 @@ jobs:
     - name: Build and push the Docker image
       run: |
         docker build --tag api-test-kube:${{ github.sha }} ./API/app/.
-        docker push api-test-kube:${{ github.sha }}
+        docker push ${{ secrets.DHR_UN }}/api-test-kube:${{ github.sha }}
     #    kubectl apply -f Kubernetes/deployment-api.yaml
         
     
