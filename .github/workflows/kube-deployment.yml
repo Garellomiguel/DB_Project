@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
     
     - name: Docker Login
       uses: docker/login-action@v1.14.1
@@ -18,13 +18,22 @@ jobs:
         password: ${{ secrets.DHR_PASS }}
         logour: true
 
-    - name: Build and push the Docker image
-      run: |
-        docker build --file Dockerfile --tag ${{ secrets.DHR_URL }}/api-test-kube:$ {{ github.sha }} ./API/app/.
-        docker push ${{ secrets.DHR_URL }}/api-test-kube:$ {{ github.sha }}
-        
     - name: Kubernetes Set Context
       uses: Azure/k8s-set-context@v2
       with:
         method: kubeconfig
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+
+    - name: test actions
+      run: |
+        ls
+    #- name: Build and push the Docker image
+    #  run: |
+    #    docker build --file Dockerfile --tag ${{ secrets.DHR_URL }}/api-test-kube:$ {{ github.sha }} ./API/app/.
+    #    docker push ${{ secrets.DHR_URL }}/api-test-kube:$ {{ github.sha }}
+    #    kubectl apply -f Kubernetes/deployment-api.yaml
+        
+    
+        
+    
