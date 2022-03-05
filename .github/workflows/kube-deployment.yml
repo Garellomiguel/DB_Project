@@ -21,15 +21,11 @@ jobs:
       with:
         method: kubeconfig
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
-
-
-    - name: test actions
+        
+    - name: Build and push the Docker image
       run: |
-        ls
-    #- name: Build and push the Docker image
-    #  run: |
-    #    docker build --file Dockerfile --tag ${{ secrets.DHR_URL }}/api-test-kube:$ {{ github.sha }} ./API/app/.
-    #    docker push ${{ secrets.DHR_URL }}/api-test-kube:$ {{ github.sha }}
+        docker build --file Dockerfile --tag api-test-kube:${{ github.sha }} ./API/app/.
+        docker push ${{ secrets.DHR_URL }}/api-test-kube:${{ github.sha }}
     #    kubectl apply -f Kubernetes/deployment-api.yaml
         
     
